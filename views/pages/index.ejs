@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+   </head>
+   <body class="container">
+      <header></header>
+      <main>
+         <div class="jumbotron">
+         <a href="/makes/homepage">Homepage</a>
+         <%if(unique_brands.length==0){%>
+         <h3 class="error">No response received for manufacturers.</h3>
+         <%}%>
+         <h3 class="vehicleheader" >Vehicle Search</h3>
+         <div class="manufacturediv">
+            <div>
+               <label>Manufacturers</label>
+               <select id="selectManufacturer"
+                  onchange="myselectChange()">
+                  <%
+                     if(unique_brands!=[]){
+                     var mans = unique_brands;
+                     for ( var i = 0; i < mans.length; i++ )
+                     {
+                       var selected = ( mans[ i ].toLowerCase() == makename ) ? "selected" : "";
+                       var selected1 = makename != "homepage" ? "" : "selected";
+                             %>
+                  <option <%=selected %> value="<%=mans[ i ] %>">
+                     <%=mans[ i ]%>
+                  </option>
+                  <%
+                     }
+                     }
+                     %>
+                  <option <%=selected1%>>Select</option>
+               </select>
+            </div>
+            <div class="">
+               <label>Makes</label>
+               <select id="selectMakes">
+                  <%
+                     if(unique_makes!=[]){
+                     var mansmakes = unique_makes;
+                     for ( var i = 0; i < mansmakes.length; i++ )
+                     {
+                     %>
+                  <option value="<%=mansmakes[ i ] %>">
+                     <%=mansmakes[ i ]%>
+                  </option>
+                  <%
+                     }
+                     }
+                     %>
+                  <option selected="selected">Select</option>
+               </select>
+            </div>
+         </div>
+         <h3>Vehicle Search Using VIN</h3>
+         <form class="VINSearch">
+            <input id="VINNo" required placeholder="Enter VIN number of vehicle"></input>
+            <a class="button" onClick = "submitVIN()">Submit</a>
+         </form>
+         <%if (year && make && model != "") {%>
+         <p>Vehicle Year: <%=year%></p>
+         <p>Vehicle Make: <%=make%></p>
+         <p>Vehicle Model: <%=model%></p>
+      </main>
+      <%}else if(flag!="") {%>
+      <p>No response received from the VIN number entered.</p>
+      <%}%>
+      <footer>
+      </footer>
+   </body>
+   <script>
+      function myselectChange() { 
+      var url = "/makes/"+ document.getElementById("selectManufacturer").value;
+      
+      window.location.href =  url;
+      } 
+      
+      function submitVIN() { 
+        if(document.getElementById("VINNo").value == ""){
+          alert("Please enter a VIN Number");
+        }
+        else if(document.getElementById("VINNo").value.length != 17){
+          alert("Please enter a 17 digit VIN Number");
+        }
+        else{
+          var url1 = "/VIN/"+ document.getElementById("VINNo").value;
+          window.location.href =  url1;
+        }
+      
+      } 
+      
+   </script>
+   <style>
+      .button {
+      display: block;
+      width: 70px;
+      height: 20px;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      color: black;
+      font-weight: bold;
+      line-height: 25px;
+      margin-bottom: 50px;
+      }
+      a{
+      cursor: pointer;
+      }
+      #selectManufacturer{
+      margin-left: 19px;
+      margin-bottom: 10px;
+      width: 250px;
+      }
+      #selectMakes{
+      margin-left: 75px;
+      width: 250px;
+      }
+      .manufacturediv{
+      margin-bottom: 30px;
+      }
+      #VINNo{
+      margin-bottom: 10px;
+      }
+      .vehicleheader{
+        margin-top: 50px;
+      }
+      .error{
+        color: darkred;
+      }
+   </style>
+</html>
